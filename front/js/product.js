@@ -38,7 +38,7 @@ const store = (data) => {
     addCart.setAttribute("data-unique", `${id}-${colors.value}`);
     //declaration des vaiable
     let unique = addCart.dataset.unique;
-    let prix = Number(price.innerHTML);
+    // let prix = Number(price.innerHTML);
     let qte = Number(quantity.value);
 
     //create array object for local storage
@@ -46,7 +46,6 @@ const store = (data) => {
       id: unique,
       color: colors.value,
       quantity: qte,
-      price: prix,
     };
 
     //get item (array ) from local storage
