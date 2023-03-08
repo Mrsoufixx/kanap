@@ -19,8 +19,10 @@ const products = (data) => {
 
   //create option for colors exist in table colors
   const colors = document.querySelector("#colors");
+  
   data.colors.map((e) => {
     let color = document.createElement("option");
+    color.setAttribute("value",e)
     color.innerHTML = e;
     colors.insertAdjacentElement("beforeend", color);
   });
@@ -40,32 +42,37 @@ const store = (data) => {
     let unique = addCart.dataset.unique;
     // let prix = Number(price.innerHTML);
     let qte = Number(quantity.value);
+    if (!colors.value || quantity.value == 0) {
+      return alert('please fill quantity and option fields')
+  }
+  else{
+//create array object for local storage
+let product = {
+  id: unique,
+  color: colors.value,
+  quantity: qte,
+};
 
-    //create array object for local storage
-    let product = {
-      id: unique,
-      color: colors.value,
-      quantity: qte,
-    };
+//get item (array ) from local storage
+const items = JSON.parse(localStorage.getItem("items")) || [];
+let existIndex = items.findIndex((i) => i.id === unique);
+//inserer les objets (produts) dans array items
 
-    //get item (array ) from local storage
-    const items = JSON.parse(localStorage.getItem("items")) || [];
-    let existIndex = items.findIndex((i) => i.id === unique);
-    //inserer les objets (produts) dans array items
+if (existIndex > -1) {
+  items[existIndex].quantity += qte;
+  // alert("item already exist we add quantity")
+  if (items[existIndex].qte <= 0) {
+    items.splice(existIndex, 1);
+    // alert("you cant add 0 item")
+  }
+} else {
+  items.push(product);
+  alert("item added")
+}
 
-    if (existIndex > -1) {
-      items[existIndex].quantity += qte;
-      alert("item already exist we add quantity")
-      if (items[existIndex].qte <= 0) {
-        items.splice(existIndex, 1);
-        alert("you cant add 0 item")
-      }
-    } else {
-      items.push(product);
-      alert("item added")
-    }
-
-    localStorage.setItem("items", JSON.stringify(items));
+localStorage.setItem("items", JSON.stringify(items));
+  }
+    
   });
 };
 

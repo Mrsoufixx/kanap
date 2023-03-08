@@ -37,7 +37,7 @@ const carts = (data, element) => {
       <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" id=${element.id} value=${element.quantity}>
     </div>
     <div class="cart__item__content__settings__delete">
-      <p class="deleteItem">Supprimer</p>
+      <p class="deleteItem" id=d-${element.id} >Supprimer</p>
     </div>
   </div>
 </div>
@@ -49,14 +49,16 @@ const carts = (data, element) => {
   totalQuantity.innerHTML = items.length;
 
   //eclaration vaiable element exist in product
-  const itemQuantity = document.querySelector(".itemQuantity");
-  const deleteItem = document.querySelector(".deleteItem");
+  const itemQuantity = document.getElementById(element.id);
+  
+  const deleteItem = document.getElementById( `d-${element.id}`);
+  console.log(deleteItem)
 
   //update quantity and total price
   itemQuantity.addEventListener("change", () => {
     let qte = Number(itemQuantity.value);
     element.quantity = qte;
-    totalPrice.innerHTML = updateTotal(data).toLocaleString();
+    totalPrice.innerHTML = items.reduce((acc, val) => (acc+= val.quantity*data.price),0)
   });
 
   //delete item and update total price
@@ -65,6 +67,7 @@ const carts = (data, element) => {
     let Unique = cartItem.dataset.unique;
     if (confirm("Are you sure you want to delete this item?")) {
       cartItem.remove();
+
       // Remove the item from localStorage as well
       const id = items.findIndex((item) => item.id === Unique);
       if (id > -1) {
